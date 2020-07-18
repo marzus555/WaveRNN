@@ -81,7 +81,6 @@ def train(model, optimizer, criterion, scheduler, epochs, batch_size, step, lr, 
         for i, (x, m, y) in enumerate(train_loader):
             if use_cuda:
                 x, m, y = x.cuda(), m.cuda(), y.cuda()
-            scheduler.step()
             optimizer.zero_grad()
             y_hat = model(x, m)
             # y_hat = y_hat.transpose(1, 2)
@@ -106,6 +105,7 @@ def train(model, optimizer, criterion, scheduler, epochs, batch_size, step, lr, 
             else:
                 print(" [!] Skipping the step...")
                 skipped_steps += 1
+            scheduler.step()
             speed = (i + 1) / (time.time() - start)
             step += 1
             cur_lr = optimizer.param_groups[0]["lr"]
