@@ -48,7 +48,7 @@ class MyDataset(Dataset):
             mel_length = mel_lengths[i]
             print(mel_length)
             melNormal = batch[i][0]
-            print(melNormal)
+            print(melNormal.shape)
             melResized = melNormal[:mel_length, :].T
             print(melResized)
             melResizedList.append(melResized)
