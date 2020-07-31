@@ -41,12 +41,19 @@ class MyDataset(Dataset):
         return len(self.metadata)
 
     def collate(self, batch):
-        min_mel_len = np.min([x[0].shape[-1] for x in batch])
+        melList = [self.ap.melspectrogram(x[1]).astype('float32') for x in batch]
+        mel_lengths = [m.shape[1] for m in melList]
+        melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
+        print(melList)
+        print(mel_lengths)
+        print(melResized)
+        
+        min_mel_len = np.min([melResized.shape[-1] for x in batch])
         active_mel_len = np.minimum(min_mel_len - 2 * self.pad, self.mel_len)
         seq_len = active_mel_len * self.hop_length
         pad = self.pad  # padding against resnet
         mel_win = active_mel_len + 2 * pad
-        max_offsets = [x[0].shape[-1] - (mel_win + 2 * pad) for x in batch]
+        max_offsets = [melResized.shape[-1] - (mel_win + 2 * pad) for x in batch]
         if self.eval:
             mel_offsets = [10] * len(batch)
         else:
@@ -54,7 +61,7 @@ class MyDataset(Dataset):
         sig_offsets = [(offset + pad) * self.hop_length for offset in mel_offsets]
 
         mels = [
-            x[0][:, mel_offsets[i] : mel_offsets[i] + mel_win]
+            melResized[:, mel_offsets[i] : mel_offsets[i] + mel_win]
             for i, x in enumerate(batch)
         ]
 
