@@ -43,10 +43,10 @@ class MyDataset(Dataset):
     def collate(self, batch):
         melList = [self.ap.melspectrogram(x[1]).astype('float32') for x in batch]
         mel_lengths = [m.shape[1] for m in melList]
-        melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
-        print(melList)
+        melResized = np.array([x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)])
         print(mel_lengths)
-        print(melResized)
+        mel_lengthsTest = [m.shape[1] for m in melResized]
+        print(mel_lengthsTest)
         
         min_mel_len = np.min([melResized.shape[-1] for x in batch])
         active_mel_len = np.minimum(min_mel_len - 2 * self.pad, self.mel_len)
