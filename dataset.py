@@ -62,6 +62,10 @@ class MyDataset(Dataset):
             x[1][sig_offsets[i] : sig_offsets[i] + seq_len + 1]
             for i, x in enumerate(batch)
         ]
+        print('checking mels')
+        print(mel_offsets)
+        print(len(mels))
+        print(np.array(mels).shape)
         mels = np.stack(mels).astype(np.float32)
         if self.mode in ['gauss', 'mold']:
             coarse = np.stack(coarse).astype(np.float32)
