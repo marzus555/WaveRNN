@@ -45,8 +45,8 @@ class MyDataset(Dataset):
         mel_lengths = [m.shape[1] for m in melList]
         melResizedList = []
         for i in range(len(mel_lengths)):
-            melLength = mel_lengths[i]
-            print(melLength)
+            mel_length = mel_lengths[i]
+            print(mel_length)
             melNormal = batch[i][0]
             print(melNormal)
             melResized = melNormal[:mel_length, :].T
