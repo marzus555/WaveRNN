@@ -54,9 +54,7 @@ class MyDataset(Dataset):
             melResizedList.append(melResized)
         #melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
         #melResized = np.array(melResized)
-        print(mel_lengths)
-        mel_lengthsTest = [m.shape[1] for m in melResized]
-        print(mel_lengthsTest)
+        melResized = np.array(melResizedList)
         
         min_mel_len = np.min([melResized.shape[-1] for x in batch])
         active_mel_len = np.minimum(min_mel_len - 2 * self.pad, self.mel_len)
