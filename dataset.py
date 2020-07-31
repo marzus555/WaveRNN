@@ -43,7 +43,8 @@ class MyDataset(Dataset):
     def collate(self, batch):
         melList = [self.ap.melspectrogram(x[1]).astype('float32') for x in batch]
         mel_lengths = [m.shape[1] for m in melList]
-        melResized = np.ndarray([x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)])
+        melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
+        melResized = np.array(melResized)
         print(mel_lengths)
         mel_lengthsTest = [m.shape[1] for m in melResized]
         print(mel_lengthsTest)
