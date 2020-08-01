@@ -43,15 +43,6 @@ class MyDataset(Dataset):
     def collate(self, batch):
         melList = [self.ap.melspectrogram(x[1]).astype('float32') for x in batch]
         mel_lengths = [m.shape[1] for m in melList]
-        '''melResizedList = []
-        for i in range(len(mel_lengths)):
-            mel_length = mel_lengths[i]
-            print(mel_length)
-            melNormal = batch[i][0]
-            print(melNormal.shape)
-            melResized = melNormal[:mel_length, :].T
-            print(melResized.shape)
-            melResizedList.append(np.array(melResized))'''
         melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
         
         min_mel_len = np.min([melRe.shape[-1] for melRe in melResized])
@@ -75,10 +66,6 @@ class MyDataset(Dataset):
             x[1][sig_offsets[i] : sig_offsets[i] + seq_len + 1]
             for i, x in enumerate(batch)
         ]
-        print('checking mels')
-        print(mel_offsets)
-        print(len(mels))
-        print(np.array(mels).shape)
         mels = np.stack(mels).astype(np.float32)
         if self.mode in ['gauss', 'mold']:
             coarse = np.stack(coarse).astype(np.float32)
