@@ -43,7 +43,7 @@ class MyDataset(Dataset):
     def collate(self, batch):
         melList = [self.ap.melspectrogram(x[1]).astype('float32') for x in batch]
         mel_lengths = [m.shape[1] for m in melList]
-        melResizedList = []
+        '''melResizedList = []
         for i in range(len(mel_lengths)):
             mel_length = mel_lengths[i]
             print(mel_length)
@@ -51,17 +51,15 @@ class MyDataset(Dataset):
             print(melNormal.shape)
             melResized = melNormal[:mel_length, :].T
             print(melResized.shape)
-            melResizedList.append(np.array(melResized))
-        #melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
-        #melResized = np.array(melResized)
-        melResized = np.array(melResizedList)
+            melResizedList.append(np.array(melResized))'''
+        melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
         
-        min_mel_len = np.min([melResized.shape[-1] for x in batch])
+        min_mel_len = np.min([melRe.shape[-1] for melRe in melResized])
         active_mel_len = np.minimum(min_mel_len - 2 * self.pad, self.mel_len)
         seq_len = active_mel_len * self.hop_length
         pad = self.pad  # padding against resnet
         mel_win = active_mel_len + 2 * pad
-        max_offsets = [melResized.shape[-1] - (mel_win + 2 * pad) for x in batch]
+        max_offsets = [melRe.shape[-1] - (mel_win + 2 * pad) for melRe in melResized]
         if self.eval:
             mel_offsets = [10] * len(batch)
         else:
@@ -69,8 +67,8 @@ class MyDataset(Dataset):
         sig_offsets = [(offset + pad) * self.hop_length for offset in mel_offsets]
 
         mels = [
-            melResized[:, mel_offsets[i] : mel_offsets[i] + mel_win]
-            for i, x in enumerate(batch)
+            melRe[:, mel_offsets[i] : mel_offsets[i] + mel_win]
+            for i, melRe in enumerate(melResized)
         ]
 
         coarse = [
