@@ -51,7 +51,7 @@ class MyDataset(Dataset):
             print(melNormal.shape)
             melResized = melNormal[:mel_length, :].T
             print(melResized.shape)
-            melResizedList.append(melResized)
+            melResizedList.append(np.array(melResized))
         #melResized = [x[0][:mel_length, :].T for x, mel_length in zip(batch, mel_lengths)]
         #melResized = np.array(melResized)
         melResized = np.array(melResizedList)
