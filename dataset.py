@@ -50,26 +50,30 @@ class MyDataset(Dataset):
         else:
             mel_offsets = [np.random.randint(0, offset) for offset in max_offsets]
         sig_offsets = [(offset + pad) * self.hop_length for offset in mel_offsets]
-        for sig_offset in sig_offsets:
-            print('sig_offset')
-            print(sig_offset)
-            print('max offset')
-            print(sig_offset + seq_len + 1)
             
         for i, x in enumerate(batch):
+            sigOffsetBefore = sig_offsets[i]
+            maxSigOffsetBefore = sig_offsets[i] + seq_len + 1
+            
             maxSize = x[1].shape[0]
             maxSigOffset = sig_offsets[i] + seq_len + 1
             if maxSigOffset > maxSize:
                 maxSigOffset = maxSize
             sig_offsets[i] = maxSize - (seq_len + 2)
-        
-        print('after alter')
-        for sig_offset in sig_offsets:
-            print('sig_offset')
-            print(sig_offset)
-            print('max offset')
-            print(sig_offset + seq_len + 1)
-        
+            
+            sigOffsetAfter = sig_offsets[i]
+            maxSigOffsetAfter = sig_offsets[i] + seq_len + 1
+            if (sigOffsetBefore - sigOffsetAfter) != 0:
+                print('there was a difference in sig offset')
+                print('sigOffsetBefore')
+                print(sigOffsetBefore)
+                print('maxSigOffsetBefore')
+                print(maxSigOffsetBefore)
+                print('sigOffsetAfter')
+                print(sigOffsetAfter)
+                print('maxSigOffsetAfter')
+                print(maxSigOffsetAfter)
+            
         mels = [
             x[0][:, mel_offsets[i] : mel_offsets[i] + mel_win]
             for i, x in enumerate(batch)
