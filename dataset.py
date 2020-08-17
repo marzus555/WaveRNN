@@ -55,15 +55,10 @@ class MyDataset(Dataset):
             sigOffsetBefore = sig_offsets[i]
             maxSigOffsetBefore = sig_offsets[i] + seq_len + 1
             
-            print('x[1].shape')
-            print(x[1].shape)
-            print(x[1].shape[0])
-            print(x[1].shape[-1])
             maxSize = x[1].shape[0]
             maxSigOffset = sig_offsets[i] + seq_len + 1
             if maxSigOffset > maxSize:
-                maxSigOffset = maxSize
-            sig_offsets[i] = maxSize - (seq_len + 2)
+                sig_offsets[i] = maxSize - (seq_len + 2)
             
             sigOffsetAfter = sig_offsets[i]
             maxSigOffsetAfter = sig_offsets[i] + seq_len + 1
