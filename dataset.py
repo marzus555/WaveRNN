@@ -50,6 +50,25 @@ class MyDataset(Dataset):
         else:
             mel_offsets = [np.random.randint(0, offset) for offset in max_offsets]
         sig_offsets = [(offset + pad) * self.hop_length for offset in mel_offsets]
+        for sig_offset in sig_offsets:
+            print('sig_offset')
+            print(sig_offset)
+            print('max offset')
+            print(sig_offset + seq_len + 1)
+            
+        for i, x in enumerate(batch):
+            maxSize = x[1].shape[0]
+            maxSigOffset = sig_offsets[i] + seq_len + 1
+            if maxSigOffset > maxSize:
+                maxSigOffset = maxSize
+            sig_offsets[i] = maxSize - (seq_len + 2)
+        
+        print('after alter')
+        for sig_offset in sig_offsets:
+            print('sig_offset')
+            print(sig_offset)
+            print('max offset')
+            print(sig_offset + seq_len + 1)
         
         mels = [
             x[0][:, mel_offsets[i] : mel_offsets[i] + mel_win]
@@ -72,8 +91,6 @@ class MyDataset(Dataset):
                     print(x[1].shape)
                     print('coarse.items shape')
                     print((x[1][sig_offsets[i] : sig_offsets[i] + seq_len + 1]).shape)
-                print('coarse.shape')
-                print(coarse.shape)
                 coarse = np.stack(coarse).astype(np.float32)
                 
             coarse = torch.FloatTensor(coarse)
