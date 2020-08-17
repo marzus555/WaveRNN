@@ -62,7 +62,20 @@ class MyDataset(Dataset):
         
         mels = np.stack(mels).astype(np.float32)
         if self.mode in ['gauss', 'mold']:
-            coarse = np.stack(coarse).astype(np.float32)
+            try:
+                coarse = np.stack(coarse).astype(np.float32)
+            except ValueError:
+                print('value error')
+                for i, x in enumerate(batch):
+                    print(sig_offsets[i])
+                    print(sig_offsets[i] + seq_len + 1)
+                    print(x[1].shape)
+                    print('coarse.items shape')
+                    print((x[1][sig_offsets[i] : sig_offsets[i] + seq_len + 1]).shape)
+                print('coarse.shape')
+                print(coarse.shape)
+                coarse = np.stack(coarse).astype(np.float32)
+                
             coarse = torch.FloatTensor(coarse)
             x_input = coarse[:, :seq_len]
         elif type(self.mode) is int:
