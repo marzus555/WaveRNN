@@ -40,7 +40,7 @@ def create_experiment_folder(root_path, model_name):
     # if debug:
         # commit_hash = 'debug'
     # else:
-    commit_hash = 'marius_run'#get_commit_hash()
+    commit_hash = 'commit_hash'#get_commit_hash()
     output_folder = os.path.join(
         root_path, model_name + '-' + date_str + '-' + commit_hash)
     os.makedirs(output_folder, exist_ok=True)
