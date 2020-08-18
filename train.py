@@ -183,9 +183,9 @@ def main(args):
         train_ids = pickle.load(f)
 
     # pick validation set
-    test_ids = train_ids[-10:]
-    test_id = train_ids[4]
-    train_ids = train_ids[:-10]
+    test_set_size = CONFIG['test_set_size'] if CONFIG['test_set_size'] is not None else 10
+    test_ids = train_ids[-test_set_size:]
+    train_ids = train_ids[:-test_set_size]
 
     # create the model
     assert np.prod(CONFIG.upsample_factors) == ap.hop_length
