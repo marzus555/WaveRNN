@@ -22,7 +22,7 @@
         // Normalization parameters
         "signal_norm": true,    // normalize the spec values in range [0, 1]
         "symmetric_norm": true, // move normalization to range [-1, 1]
-        "max_norm": 4.0,          // scale normalization to range [-max_norm, max_norm] or [0, max_norm]
+        "max_norm": 1,          // scale normalization to range [-max_norm, max_norm] or [0, max_norm]
         "clip_norm": true,      // clip normalized values into the range.
         "mel_fmin": 0.0,         // minimum freq level for mel-spec. ~50 for male and ~95 for female voices. Tune for dataset!!
         "mel_fmax": 8000.0,        // maximum freq level for mel-spec. Tune for dataset!!
